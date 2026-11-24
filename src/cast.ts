@@ -3,8 +3,8 @@ import { getActiveConnections } from "./listeners";
 import ffmpeg from "./ffmpeg";
 
 const FRAME_MS = 20;
-const MAX_QUEUE_FRAMES = 200;
-const INITIAL_BUFFER_MS = FRAME_MS * 20;
+const MAX_QUEUE_FRAMES = 100;
+const INITIAL_BUFFER_MS = FRAME_MS * 10;
 
 const frameQueue: Buffer[] = [];
 
@@ -31,7 +31,6 @@ function tick() {
   if (frame) {
     for (const conn of getActiveConnections()) {
       if (conn.state.status !== VoiceConnectionStatus.Ready) continue;
-      conn.setSpeaking(true); // TODO
       conn.playOpusPacket(frame);
     }
   } else {
