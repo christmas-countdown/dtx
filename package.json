@@ -1,6 +1,6 @@
 {
   "name": "dtx",
-  "module": "index.ts",
+  "module": "src/",
   "type": "module",
   "private": true,
   "devDependencies": {
