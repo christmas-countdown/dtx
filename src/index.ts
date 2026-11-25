@@ -71,11 +71,17 @@ const server = Bun.serve({
                     VoiceConnectionStatus.Connecting,
                     5_000,
                   ),
-                ]).catch(() => connection.destroy());
+                ]).catch(() => {
+                  try {
+                    connection.destroy()
+                  } catch {}
+                });
               });
             })
             .catch((error) => {
-              connection.destroy();
+              try {
+                connection.destroy()
+              } catch {}
               console.error(error);
             });
           break;
@@ -91,7 +97,9 @@ const server = Bun.serve({
         case "leave": {
           const { guildId } = msg;
           const connection = getVoiceConnection(guildId);
-          connection?.destroy();
+          try {
+            connection?.destroy()
+          } catch {}
           break;
         }
         case "upserver": {
