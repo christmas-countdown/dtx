@@ -10,7 +10,9 @@ const frameQueue: Buffer[] = [];
 
 // health-tracking metrics
 let lastTickAt: number | null = null;
+let minGapMs = Infinity;
 let maxGapMs = 0;
+let sumGaps = 0;
 let starvedTicks = 0;
 let overflowDrops = 0;
 let minQueue = Infinity;
@@ -22,6 +24,8 @@ function tick() {
   const now = performance.now();
   if (lastTickAt !== null) {
     const gap = now - lastTickAt;
+    sumGaps += gap;
+    if (gap < minGapMs) minGapMs = gap;
     if (gap > maxGapMs) maxGapMs = gap;
   }
   lastTickAt = now;
@@ -44,16 +48,21 @@ function tick() {
 }
 
 setInterval(() => {
-  const queueLength = `${Number.isFinite(minQueue) ? minQueue : frameQueue.length}..${frameQueue.length}..${maxQueue}`;
-  const suboptimal = starvedTicks > 0 || overflowDrops > 0 || maxGapMs > 25;
+  const avgGapMs = sumGaps / (1000 / FRAME_MS);
+  const suboptimal =
+    starvedTicks > 0 || overflowDrops > 0 || maxGapMs > 30 || avgGapMs > 22;
   if (suboptimal) {
+    const queueLength = `${Number.isFinite(minQueue) ? minQueue : frameQueue.length}..${frameQueue.length}..${maxQueue}`;
+    const gaps = `${minGapMs.toFixed(1)}/${avgGapMs.toFixed(1)}/${maxGapMs.toFixed(1)}ms`
     console.warn(
-      `[cast] queue=${queueLength} starved=${starvedTicks} drops=${overflowDrops} maxGap=${maxGapMs.toFixed(1)}ms`,
+      `[cast] queue=${queueLength} starved=${starvedTicks} drops=${overflowDrops} timing=${gaps}`,
     );
   }
   starvedTicks = 0;
   overflowDrops = 0;
+  minGapMs = Infinity
   maxGapMs = 0;
+  sumGaps = 0;
   minQueue = frameQueue.length;
   maxQueue = frameQueue.length;
 }, 1000);

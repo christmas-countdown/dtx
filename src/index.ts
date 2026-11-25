@@ -50,6 +50,8 @@ const server = Bun.serve({
             guildId,
             channelId,
             adapterCreator: createAdapter(server, guildId, ws.data.shardId),
+            selfMute: false,
+            selfDeaf: true,
           });
           connection.on(VoiceConnectionStatus.Ready, () => {
             resume(guildId);
@@ -73,14 +75,14 @@ const server = Bun.serve({
                   ),
                 ]).catch(() => {
                   try {
-                    connection.destroy()
+                    connection.destroy();
                   } catch {}
                 });
               });
             })
             .catch((error) => {
               try {
-                connection.destroy()
+                connection.destroy();
               } catch {}
               console.error(error);
             });
@@ -98,7 +100,7 @@ const server = Bun.serve({
           const { guildId } = msg;
           const connection = getVoiceConnection(guildId);
           try {
-            connection?.destroy()
+            connection?.destroy();
           } catch {}
           break;
         }
