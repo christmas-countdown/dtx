@@ -1,4 +1,6 @@
-FROM oven/bun:1
+FROM oven/bun:1-debian
+
+RUN apt install ffmpeg
 
 WORKDIR /app
 
