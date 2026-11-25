@@ -3,7 +3,7 @@ import { getActiveConnections } from "./listeners";
 import ffmpeg from "./ffmpeg";
 
 const FRAME_MS = 20;
-const MAX_QUEUE_FRAMES = 100;
+const MAX_QUEUE_FRAMES = 5e3 / FRAME_MS;
 const INITIAL_BUFFER_MS = FRAME_MS * 10;
 
 const frameQueue: Buffer[] = [];

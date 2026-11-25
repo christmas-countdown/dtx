@@ -1,6 +1,5 @@
 export default [
   "ffmpeg",
-  "-re",
   "-hide_banner",
   "-nostats",
   "-loglevel",
@@ -20,8 +19,6 @@ export default [
   "1",
   "-packet_loss",
   "5",
-  // "-dtx",
-  // "0",
   "-application",
   "audio",
   "-map",
