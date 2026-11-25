@@ -45,7 +45,7 @@ function tick() {
 
 setInterval(() => {
   const queueLength = `${Number.isFinite(minQueue) ? minQueue : frameQueue.length}..${frameQueue.length}..${maxQueue}`;
-  const suboptimal = starvedTicks > 0 || overflowDrops > 0 || maxGapMs > 22;
+  const suboptimal = starvedTicks > 0 || overflowDrops > 0 || maxGapMs > 25;
   if (suboptimal) {
     console.warn(
       `[cast] queue=${queueLength} starved=${starvedTicks} drops=${overflowDrops} maxGap=${maxGapMs.toFixed(1)}ms`,

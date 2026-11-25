@@ -129,6 +129,9 @@ const server = Bun.serve({
   },
 });
 
+process.on("uncaughtException", console.error);
+process.on("unhandledRejection", console.error);
+
 process.on("SIGINT", () => {
   process.exit(0);
 });
