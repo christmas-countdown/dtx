@@ -1,6 +1,6 @@
-FROM oven/bun:1-debian
+FROM oven/bun:1-alpine
 
-RUN apt install ffmpeg
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /app
 
